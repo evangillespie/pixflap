@@ -10,10 +10,9 @@ def convert_image(filepath):
     recreate the image in the right size and with the right colours
     """
     img = Image.open(filepath)
-    img = ImageConverter.convert_image(img)
-    print img
+    img = ImageConverter.prepare_image(img)
+    img = ImageConverter.simplify_image(img)
 
-    # TODO show the image
     img.show()
 
 def print_help():

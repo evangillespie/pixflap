@@ -1,6 +1,7 @@
 
 from PIL import Image
-from .config import WIDTH, HEIGHT
+from math import pow, sqrt
+from .config import WIDTH, HEIGHT, BASE_COLOURS
 from .exceptions import ImageSizeError
 
 __author__ = ('evan',)
@@ -14,7 +15,7 @@ class ImageConverter(object):
 		pass
 
 	@classmethod
-	def convert_image(cls, img):
+	def prepare_image(cls, img):
 		"""
 		open an image file and process it into the right shape
 
@@ -27,6 +28,21 @@ class ImageConverter(object):
 		return img
 
 	@classmethod
+	def simplify_image(cls, img):
+		"""
+		collapse the image into the colours found in config
+
+		:return Image: a PIL Image object in reduced colour form
+		"""
+		w, h = img.size
+		pixels = img.load()
+		for i in range(w):
+			for j in range(h):
+				pixels[i,j] = cls._get_closest_colour(pixels[i,j])
+
+		return img
+
+	@classmethod
 	def _resize_image(cls, img):
 		"""
 		resize an image object to the size defined in the config and return it.
@@ -34,7 +50,6 @@ class ImageConverter(object):
 		old_w, old_h = img.size
 		resize_ratio = max([float(WIDTH)/float(old_w), float(HEIGHT)/float(old_h)])
 		img = img.resize((int(old_w*resize_ratio), int(old_h*resize_ratio)), Image.ANTIALIAS)
-		print img
 		return img
 
 	@classmethod
@@ -75,3 +90,34 @@ class ImageConverter(object):
 		w, h = img.size
 		if w != WIDTH or h != HEIGHT:
 			raise ImageSizeError("your image is the wrong size. It is: %s x %s and should be: %s x %s" % (w, h, WIDTH, HEIGHT))
+
+	@classmethod
+	def _get_closest_colour(cls, pixel):
+		"""
+		compare the pixel to available values from the config and return the closest available colour
+		
+		:param pixel: RGB tuple of original pixel
+
+		:return: RGB tuple of the new pixel
+		"""
+		least_distance = sqrt(pow(255, 2) * 3) # an arbitrarilty high number
+		least_colour = None
+
+		for colour in BASE_COLOURS:
+			distance = cls._get_distance(colour, pixel)
+			if distance < least_distance:
+				least_distance = distance
+				least_colour = colour
+
+		return least_colour
+
+	@classmethod
+	def _get_distance(cls, pix1, pix2):
+		"""
+		calculate the distance between two pixels in 3-space
+		"""
+		return sqrt(
+			pow(pix1[0]-pix2[0], 2) +\
+			pow(pix1[1]-pix2[1], 2) +\
+			pow(pix1[2]-pix2[2], 2)
+		)
