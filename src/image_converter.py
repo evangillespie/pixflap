@@ -1,6 +1,6 @@
 
 from PIL import Image
-from math import pow, sqrt
+from math import pow, sqrt, ceil
 from .config import WIDTH, HEIGHT, BASE_COLOURS
 from .exceptions import ImageSizeError
 
@@ -49,7 +49,7 @@ class ImageConverter(object):
 		"""
 		old_w, old_h = img.size
 		resize_ratio = max([float(WIDTH)/float(old_w), float(HEIGHT)/float(old_h)])
-		img = img.resize((int(old_w*resize_ratio), int(old_h*resize_ratio)), Image.ANTIALIAS)
+		img = img.resize((int(ceil(old_w*resize_ratio)), int(ceil(old_h*resize_ratio))), Image.ANTIALIAS)
 		return img
 
 	@classmethod

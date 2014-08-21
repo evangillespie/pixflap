@@ -1,6 +1,6 @@
 # Pixel size of the whole display
-WIDTH = 30
-HEIGHT = 30
+WIDTH = 300
+HEIGHT = 300
 
 # Base colours to use
 # In ( R, G B)
