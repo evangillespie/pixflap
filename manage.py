@@ -1,6 +1,6 @@
 
 from sys import argv
-
+from PIL import Image
 from src.image_converter import ImageConverter
 
 __author__ = ('evan', )
@@ -9,8 +9,12 @@ def convert_image(filepath):
     """
     recreate the image in the right size and with the right colours
     """
-    ic = ImageConverter()
-    print ic.convert_image(filepath)
+    img = Image.open(filepath)
+    img = ImageConverter.convert_image(img)
+    print img
+
+    # TODO show the image
+    img.show()
 
 def print_help():
     print "USAGE: %s <command>" % argv[0]
@@ -22,7 +26,7 @@ if __name__ == '__main__':
         command = argv[1]
         if command == 'convert_image':
             if len(argv) == 3:
-                prepare_image(argv[2])
+                convert_image(argv[2])
             else: print_help()
     else:
         print_help()
