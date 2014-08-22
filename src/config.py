@@ -1,6 +1,6 @@
 # Pixel size of the whole display
-WIDTH = 300
-HEIGHT = 300
+WIDTH = 50
+HEIGHT = 50
 
 # Base colours to use
 # In ( R, G B)
@@ -11,7 +11,5 @@ BASE_COLOURS = [
 	(F, 0, 0), 	# red
 	(0, F, 0), 	# green
 	(0, 0, F), 	# blue
-	(F, F, 0),	# yellow
-	(0, F, F),	# cyan
-	(F, 0, F), 	# magenta	
+	(F, F, 0),	# yellow	
 ]
